@@ -57,14 +57,21 @@ const color = {
   green: [0],
 };
 
+const turntable = [
+  0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24,
+  16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
+];
+
 const area_half = {
-  right: [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 21, 23, 25, 27, 30, 32, 34, 36],
-  left: [1, 3, 5, 7, 9, 12, 14, 16, 18, 20, 22, 24, 26, 28, 29, 31, 33, 35],
+  right: turntable.slice(1, 28),
+  left: turntable.slice(19, 38),
 };
 
 const area_quater = {
-  1: [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 21, 23, 25, 27, 30, 32, 34, 36],
-  2: [1, 3, 5, 7, 9, 12, 14, 16, 18, 20, 22, 24, 26, 28, 29, 31, 33, 35],
+  1: turntable.slice(1, 10),
+  2: turntable.slice(10, 19),
+  3: turntable.slice(19, 28),
+  4: turntable.slice(29, 38),
 };
 
 function badgeColor(number) {
@@ -76,6 +83,26 @@ function badgeColor(number) {
     return 'bg-success';
   }
 }
+function areaHalf(number) {
+  if (area_half['right'].includes(number)) {
+    return 'right';
+  } else if (area_half['left'].includes(number)) {
+    return 'left';
+  }
+}
+
+function areaQuater(number) {
+  if (area_quater[1].includes(number)) {
+    return '1';
+  } else if (area_quater[2].includes(number)) {
+    return '2';
+  }else if (area_quater[3].includes(number)) {
+    return '3';
+  }   else if (area_quater[4].includes(number)) {
+    return '4';
+  }
+}
+
 </script>
 
 <template>
@@ -163,10 +190,10 @@ function badgeColor(number) {
           {{ draw.number }}
         </td>
         <td>
-          {{ draw.number }}
+          {{ areaQuater(draw.number) }}
         </td>
         <td>
-          {{ draw.number }}
+          {{ areaHalf(draw.number) }}
         </td>
         <td>
           <span class="fs-6">
