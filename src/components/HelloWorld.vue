@@ -62,17 +62,45 @@ const turntable = [
   16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26,
 ];
 
+const area_name = {
+  zero: [12, 35, 3, 26, 0, 32, 15],
+  voisins: [22, 18, 29, 7, 28, 25, 2, 21, 4, 19],
+  tier: [33, 16, 24, 5, 10, 23, 8, 30, 11, 36, 13, 27],
+  orphelins: [1, 20, 14, 31, 9, 6, 34, 17],
+};
+
 const area_half = {
-  right: turntable.slice(1, 28),
-  left: turntable.slice(19, 38),
+  right: turntable.slice(1, 19),
+  left: turntable.slice(19, 37),
 };
 
 const area_quater = {
   1: turntable.slice(1, 10),
   2: turntable.slice(10, 19),
   3: turntable.slice(19, 28),
-  4: turntable.slice(29, 38),
+  4: turntable.slice(28, 37),
 };
+console.info(area_quater);
+
+function lowhigh(number) {
+  if (number == 0) {
+    return '0';
+  } else if (number <= 18) {
+    return 'low';
+  } else {
+    return 'high';
+  }
+}
+
+function evenodd(number) {
+  if (number == 0) {
+    return '0';
+  } else if (number % 2 == 0) {
+    return 'even';
+  } else {
+    return 'odd';
+  }
+}
 
 function badgeColor(number) {
   if (color['red'].includes(number)) {
@@ -81,6 +109,18 @@ function badgeColor(number) {
     return 'bg-dark';
   } else if (color['green'].includes(number)) {
     return 'bg-success';
+  }
+}
+
+function areaName(number) {
+  if (area_name['zero'].includes(number)) {
+    return 'zero';
+  } else if (area_name['voisins'].includes(number)) {
+    return 'voisins';
+  } else if (area_name['tier'].includes(number)) {
+    return 'tier';
+  } else if (area_name['orphelins'].includes(number)) {
+    return 'orphelins';
   }
 }
 function areaHalf(number) {
@@ -96,13 +136,12 @@ function areaQuater(number) {
     return '1';
   } else if (area_quater[2].includes(number)) {
     return '2';
-  }else if (area_quater[3].includes(number)) {
+  } else if (area_quater[3].includes(number)) {
     return '3';
-  }   else if (area_quater[4].includes(number)) {
+  } else if (area_quater[4].includes(number)) {
     return '4';
   }
 }
-
 </script>
 
 <template>
@@ -164,48 +203,60 @@ function areaQuater(number) {
   <h2>History</h2>
   <div class="card">
     <table class="table table-compact">
-      <tr>
-        <td>Draw</td>
-        <td>Dozen</td>
-        <td>Column</td>
-        <td>Area</td>
-        <td>Area(Quater)</td>
-        <td>Area(Half)</td>
-        <td>Time</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr v-for="draw in draws.reverse()" :key="draw.id">
-        <td>
-          <span class="badge" :class="badgeColor(draw.number)">
-            {{ draw.number }}
-          </span>
-        </td>
-        <td>
-          {{ dozen(draw.number) }}
-        </td>
-        <td>
-          {{ column(draw.number) }}
-        </td>
-        <td>
-          {{ draw.number }}
-        </td>
-        <td>
-          {{ areaQuater(draw.number) }}
-        </td>
-        <td>
-          {{ areaHalf(draw.number) }}
-        </td>
-        <td>
-          <span class="fs-6">
-            {{ draw.created_at }}
-          </span>
-        </td>
-        <td>
-          <button @click="removeDraw(draw)" class="btn btn-danger btn-sm">
-            Remove
-          </button>
-        </td>
-      </tr>
+      <thead>
+        <tr>
+          <td>Draw</td>
+          <td>L/H</td>
+          <td>E/O</td>
+          <td>Dozen</td>
+          <td>Column</td>
+          <td>Area</td>
+          <td>Area(Q)</td>
+          <td>Area(H)</td>
+          <td>Time</td>
+          <td>&nbsp;</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="draw in draws.reverse()" :key="draw.id">
+          <td>
+            <span class="badge" :class="badgeColor(draw.number)">
+              {{ draw.number }}
+            </span>
+          </td>
+          <td>
+            {{ lowhigh(draw.number) }}
+          </td>
+          <td>
+            {{ evenodd(draw.number) }}
+          </td>
+          <td>
+            {{ dozen(draw.number) }}
+          </td>
+          <td>
+            {{ column(draw.number) }}
+          </td>
+          <td>
+            {{ areaName(draw.number) }}
+          </td>
+          <td>
+            {{ areaQuater(draw.number) }}
+          </td>
+          <td>
+            {{ areaHalf(draw.number) }}
+          </td>
+          <td>
+            <span class="fs-6">
+              {{ draw.created_at }}
+            </span>
+          </td>
+          <td>
+            <button @click="removeDraw(draw)" class="btn btn-danger btn-sm">
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
